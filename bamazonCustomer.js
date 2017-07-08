@@ -28,8 +28,10 @@ connection.query("SELECT * FROM products", function(err, res){
         table.push([res[i].item_id, res[i].product_name, res[i].price])
     }
     console.log(table.toString());
+    askQuestions();
 });
 
+function askQuestions(){
 inquirer.prompt([
     {
         name: "idNumber",
@@ -79,5 +81,5 @@ inquirer.prompt([
 
 })
 
-
+}
 

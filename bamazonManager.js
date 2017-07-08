@@ -32,7 +32,7 @@ function startPrompt() {
                 choice.viewLow();
                 break;
             case "Add to Inventory":
-                choice.addInventory();
+                choice.displayInventory();
                 break;
             case "Add New Product":
                 choice.addNew();
@@ -115,21 +115,7 @@ var choice = {
         })
     },
     addInventory: function () {
-        connection.query("SELECT * FROM products", function (err, res) {
-            if (err) throw err;
-            // console.log("All Inventory" + "\n---------------------");
-            // for (var i = 0; i < res.length; i++) {
-            //     console.log(res[i].item_id + "   " + res[i].product_name + "            " + res[i].quantity);
-            // };
-            var table = new Table({
-                head: ["item_id", "product_name", "price"]
-            });
 
-            for (var i = 0; i < res.length; i++){
-                table.push([res[i].item_id, res[i].product_name, res[i].price])
-            };
-            console.log(table.toString());
-        });
 
         inquirer.prompt([
             {
@@ -154,6 +140,25 @@ var choice = {
             console.log("success!");
         })
 
+    },
+    displayInventory: function(){
+             connection.query("SELECT * FROM products", function (err, res) {
+            if (err) throw err;
+            // console.log("All Inventory" + "\n---------------------");
+            // for (var i = 0; i < res.length; i++) {
+            //     console.log(res[i].item_id + "   " + res[i].product_name + "            " + res[i].quantity);
+            // };
+            var table = new Table({
+                head: ["item_id", "product_name", "price"]
+            });
+
+            for (var i = 0; i < res.length; i++){
+                table.push([res[i].item_id, res[i].product_name, res[i].price])
+            };
+            console.log(table.toString());
+            choice.addInventory();
+        });
+        
     }
 }
 

@@ -22,7 +22,6 @@ inquirer.prompt([
         choices: ["View Product Sales by Department", "Create New Department"]
     }
 ]).then(function(answers){
-    console.log(answers);
     if (answers.superOption === "View Product Sales by Department") {
         viewSales();
     } else {
@@ -68,7 +67,6 @@ function newDept() {
 
 //if super wants to view sales
 function viewSales() {
-    console.log("yes");
     //join select statement
     connection.query("SELECT department_id, d.department_name, over_head_costs, sum(product_sales) AS product_sales, (sum(product_sales) - over_head_costs) AS total_profit FROM departments d INNER JOIN products p ON d.department_name = p.department_name GROUP BY department_name", function(err, res){
         if (err) throw err;
