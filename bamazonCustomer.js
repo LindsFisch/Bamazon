@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
+var Table = require("cli-table2");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -14,10 +15,19 @@ connection.connect(function(err){
 });
 
 connection.query("SELECT * FROM products", function(err, res){
-    console.log("Items for Sale" + "\n---------------------");
-    for (var i = 0; i < res.length; i++) {
-        console.log(res[i].item_id + "   " + res[i].product_name + "            " + res[i].price);
-    };
+    if (err) throw err;
+    // console.log("Items for Sale" + "\n---------------------");
+    // for (var i = 0; i < res.length; i++) {
+    //     console.log(res[i].item_id + "   " + res[i].product_name + "            " + res[i].price);
+    // };
+    var table = new Table({
+        head: ["item_id", "product_name", "price"]
+    });
+
+    for (var i = 0; i < res.length; i++){
+        table.push([res[i].item_id, res[i].product_name, res[i].price])
+    }
+    console.log(table.toString());
 });
 
 inquirer.prompt([
@@ -42,11 +52,13 @@ inquirer.prompt([
                     var price = parseFloat(res[0].price);
                     //get total based on price and quantity
                     var total = price * quantity;
+                    //update total product sale
+                    var sale = total + parseFloat(res[0].product_sales);
                     //figure out new quantity
                     var newQuantity = parseInt(res[0].quantity) - parseInt(quantity);
                     //log confirmation
                     console.log("---------------------" + "\nThank you for your order of " + quantity+ " " + res[0].product_name + " ! Your total is: " + parseFloat(total) +"\n---------------------");
-                    updateServer(newQuantity, id);
+                    updateServer(newQuantity, id, sale);
                 } else { //not enough quantity
                     console.log("Insufficient quantity in our warehouse!");
                 }
@@ -56,8 +68,8 @@ inquirer.prompt([
         }
     }
 
-    function updateServer (newQuantity, id) {
-        connection.query("UPDATE products SET quantity=? WHERE item_id=?", [newQuantity, id], function(err, res) {
+    function updateServer (newQuantity, id, total) {
+        connection.query("UPDATE products SET quantity=?, product_sales=? WHERE item_id=?", [newQuantity, total, id], function(err, res) {
             if (err) throw err;
             console.log("success!");
         } )

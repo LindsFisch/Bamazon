@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
+var Table = require("cli-table2");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -47,20 +48,39 @@ var choice = {
     viewAll: function () {
         connection.query("SELECT * FROM products", function (err, res) {
             if (err) throw err;
-            console.log("All Inventory" + "\n---------------------");
-            for (var i = 0; i < res.length; i++) {
-                console.log(res[i].item_id + "   " + res[i].product_name + "            " + res[i].price);
+            // console.log("All Inventory" + "\n---------------------");
+            // for (var i = 0; i < res.length; i++) {
+            //     console.log(res[i].item_id + "   " + res[i].product_name + "            " + res[i].price);
+            // };
+
+            var table = new Table({
+                head: ["item_id", "product_name", "price"]
+            });
+
+            for (var i = 0; i < res.length; i++){
+                table.push([res[i].item_id, res[i].product_name, res[i].price])
             };
+            console.log(table.toString());
         });
     },
-    viewLow: function () {
+    viewLow: function (){
         connection.query("SELECT * FROM products WHERE quantity < 5", function (err, res) {
             if (err) throw err;
-            console.log("Low Inventory" + "\n---------------------");
-            for (var i = 0; i < res.length; i++) {
-                console.log(res[i].item_id + "   " + res[i].product_name + "            " + res[i].department_name + "      " + res[i].quantity + " remaining");
+            // console.log("Low Inventory" + "\n---------------------");
+            // for (var i = 0; i < res.length; i++) {
+            //     console.log(res[i].item_id + "   " + res[i].product_name + "            " + res[i].department_name + "      " + res[i].quantity + " remaining");
+            // };
+
+            var table = new Table({
+               head: ["item_id", "product_name", "department_name", "quantity"]
+            });
+
+            for (var i = 0; i < res.length; i++){
+                table.push([res[i].item_id, res[i].product_name, res[i].department_name, res[i].quantity])
             };
-        });
+            console.log(table.toString());
+
+            })
     },
     addNew: function () {
         inquirer.prompt([
@@ -86,7 +106,8 @@ var choice = {
                     product_name: answer.item,
                     department_name: answer.dept,
                     price: answer.price,
-                    quantity: answer.quantity
+                    quantity: answer.quantity,
+                    product_sales: 0
                 }, function (err, res) {
                     if (err) throw err;
                     console.log("Success!");
@@ -96,10 +117,18 @@ var choice = {
     addInventory: function () {
         connection.query("SELECT * FROM products", function (err, res) {
             if (err) throw err;
-            console.log("All Inventory" + "\n---------------------");
-            for (var i = 0; i < res.length; i++) {
-                console.log(res[i].item_id + "   " + res[i].product_name + "            " + res[i].quantity);
+            // console.log("All Inventory" + "\n---------------------");
+            // for (var i = 0; i < res.length; i++) {
+            //     console.log(res[i].item_id + "   " + res[i].product_name + "            " + res[i].quantity);
+            // };
+            var table = new Table({
+                head: ["item_id", "product_name", "price"]
+            });
+
+            for (var i = 0; i < res.length; i++){
+                table.push([res[i].item_id, res[i].product_name, res[i].price])
             };
+            console.log(table.toString());
         });
 
         inquirer.prompt([
