@@ -8,7 +8,7 @@ The customer view is run from `bamazonCustomer.js` and displays all the products
 [See here](images/CustomerInterface.jpg). 
 
 ### Manager View
-The manager view is run from `bamazonManager.js` and prompts 4 different choices. `View all products` shows the manager all of the inventory in the store. `View Low Inventory` shows the manager all products with a quantity of less than 5. (images/ManagerView.jpg).
+The manager view is run from `bamazonManager.js` and prompts 4 different choices. `View all products` shows the manager all of the inventory in the store. `View Low Inventory` shows the manager all products with a quantity of less than 5. [See here](images/ManagerView.jpg).
 
 The manager can also add quantity to specific item in the store with `Add to Inventory` and can also add brand new items to the store with `Add new Product`. [See here](images/ManagerAdd.jpg).
 
